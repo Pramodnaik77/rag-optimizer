@@ -1,12 +1,19 @@
+#fastapi imports
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.models.requests import AnalyzeRequest
-from app.models.responses import AnalyzeResponse
+
+#standard library imports
 from datetime import datetime
 import time
 from contextlib import asynccontextmanager
+
+#app specific imports
 from app.services.embedding_service import embedding_service
 from app.strategies.fixed_size import SmallChunkStrategy
+from app.services.llm_service import llm_service
+from app.core.constants import LLMProvider
+from app.models.requests import AnalyzeRequest
+from app.models.responses import AnalyzeResponse
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -82,6 +89,23 @@ def test_chunking(document: str):
         "total_chunks": len(chunks),
         "first_3_chunks": chunks[:3],
         "chunk_lengths": [len(c) for c in chunks[:5]]
+    }
+
+
+@app.post("/api/test-llm")
+def test_llm(query: str = "What is RAG?"):
+    context = "RAG stands for Retrieval-Augmented Generation. It combines retrieval with generation.Another is Non rag which is different."
+    answer, input_tokens, output_tokens, cost = llm_service.generate_answer(
+        query=query,
+        context=context,
+        provider=LLMProvider.GROQ
+    )
+    return {
+        "query": query,
+        "answer": answer,
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "cost": cost
     }
 
 
