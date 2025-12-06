@@ -14,6 +14,9 @@ from app.services.llm_service import llm_service
 from app.core.constants import LLMProvider
 from app.models.requests import AnalyzeRequest
 from app.models.responses import AnalyzeResponse
+from app.services.rag_service import rag_service
+from app.strategies.fixed_size import SmallChunkStrategy
+from app.core.constants import LLMProvider
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -108,6 +111,30 @@ def test_llm(query: str = "What is RAG?"):
         "cost": cost
     }
 
+@app.post("/api/test-rag")
+async def test_rag(
+    query: str = "What is RAG?",
+    document: str = "Retrieval-Augmented Generation (RAG) is a technique that combines information retrieval with text generation. It first retrieves relevant documents, then uses them as context for generating accurate responses."
+):
+    """Test complete RAG pipeline with one strategy"""
+
+    strategy = SmallChunkStrategy()
+    result = rag_service.run_strategy(
+        strategy=strategy,
+        document=document,
+        query=query,
+        llm_provider=LLMProvider.GROQ
+    )
+
+    return {
+        "strategy": result.strategy_name,
+        "accuracy": result.accuracy,
+        "relevance": result.relevance,
+        "cost": result.cost,
+        "time_ms": result.processing_time_ms,
+        "chunks": f"{result.chunks_used}/{result.chunks_created}",
+        "answer": result.generated_answer[:200] + "..."
+    }
 
 if __name__ == "__main__":
     import uvicorn
