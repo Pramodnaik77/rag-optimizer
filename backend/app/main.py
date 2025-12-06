@@ -6,6 +6,7 @@ from datetime import datetime
 import time
 from contextlib import asynccontextmanager
 from app.services.embedding_service import embedding_service
+from app.strategies.fixed_size import SmallChunkStrategy
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -53,7 +54,7 @@ def health_check():
         "timestamp": datetime.utcnow().isoformat(),
         "service": "RAG Optimizer API"
     }
-    
+
 @app.post("/api/test-embedding")
 def test_embedding(text: str = "This is a test"):
     embedding = embedding_service.generate_embedding(text)
@@ -71,6 +72,18 @@ async def analyze_document(request: AnalyzeRequest):
         "best_strategy": "Coming soon",
         "insights": ["API contract defined"]
     }
+
+@app.post("/api/test-chunking")
+def test_chunking(document: str):
+    strategy = SmallChunkStrategy()
+    chunks = strategy.chunk_document(document)
+    return {
+        "strategy": strategy.name,
+        "total_chunks": len(chunks),
+        "first_3_chunks": chunks[:3],
+        "chunk_lengths": [len(c) for c in chunks[:5]]
+    }
+
 
 if __name__ == "__main__":
     import uvicorn
