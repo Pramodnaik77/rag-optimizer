@@ -3,6 +3,17 @@ from app.utils.text_utils import clean_text
 from app.services.embedding_service import embedding_service
 from typing import List
 import numpy as np
+import nltk
+
+try:
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt_tab', quiet=True)
+
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', quiet=True)
 
 class SemanticChunkStrategy(ChunkingStrategy):
     def __init__(self):

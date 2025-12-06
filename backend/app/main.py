@@ -17,6 +17,9 @@ from app.models.responses import AnalyzeResponse
 from app.services.rag_service import rag_service
 from app.strategies.fixed_size import SmallChunkStrategy
 from app.core.constants import LLMProvider
+from app.services.rag_service import rag_service
+from app.utils.metrics import generate_insights, find_best_strategy
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -76,12 +79,44 @@ def test_embedding(text: str = "This is a test"):
 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_document(request: AnalyzeRequest):
-    return {
-        "success": True,
-        "results": [],
-        "best_strategy": "Coming soon",
-        "insights": ["API contract defined"]
-    }
+    """Main analysis endpoint - runs all 6 strategies"""
+    try:
+        # Run all strategies
+        results = await rag_service.run_all_strategies(
+            document=request.document,
+            query=request.query,
+            llm_provider=request.llm_provider,
+            llm_model=request.llm_model,
+            api_key=request.api_key
+        )
+
+        if not results:
+            return AnalyzeResponse(
+                success=False,
+                results=[],
+                best_strategy="No results",
+                insights=["All strategies failed - check document and query"]
+            )
+
+        # Generate insights and find best strategy
+        insights = generate_insights(results)
+        best_strategy = find_best_strategy(results)
+
+        return AnalyzeResponse(
+            success=True,
+            results=results,
+            best_strategy=best_strategy,
+            insights=insights
+        )
+
+    except Exception as e:
+        return AnalyzeResponse(
+            success=False,
+            results=[],
+            best_strategy="Error",
+            insights=[f"Error: {str(e)}"]
+        )
+
 
 @app.post("/api/test-chunking")
 def test_chunking(document: str):
