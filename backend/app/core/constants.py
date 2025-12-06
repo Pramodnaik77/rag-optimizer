@@ -49,3 +49,12 @@ CHUNK_CONFIGS = {
     "high_overlap": {"size": 512, "overlap": 256},
     "sentence_based": {"sentences_per_chunk": 5},
 }
+
+RAG_PROMPT_TEMPLATE = """You are a helpful assistant. Answer the user's question based ONLY on the provided context.
+
+Context:
+{context}
+
+Question: {query}
+
+Answer:"""
