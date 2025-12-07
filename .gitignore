@@ -12,3 +12,5 @@ ENV/
 .idea/
 .vscode/
 *.log
+**/.vite/
+node_modules/
