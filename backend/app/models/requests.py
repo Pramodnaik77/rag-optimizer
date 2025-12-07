@@ -23,3 +23,20 @@ class AnalyzeRequest(BaseModel):
                 "llm_model": "llama-3.1-8b-instant"
             }
         }
+
+class BatchAnalyzeRequest(BaseModel):
+    selected_query_ids: list[int] = Field(..., description="IDs of selected queries")
+    custom_queries: list[str] = Field(default=[], description="Additional custom queries")
+    llm_provider: LLMProvider = Field(default=LLMProvider.GROQ, description="LLM provider")
+    llm_model: Optional[str] = Field(default=None, description="Specific model name")
+    api_key: Optional[str] = Field(default=None, description="User API key for paid providers")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "selected_query_ids": [1, 2, 4, 5],
+                "custom_queries": ["What are the main challenges?"],
+                "llm_provider": "groq",
+                "llm_model": "llama-3.1-8b-instant"
+            }
+        }
