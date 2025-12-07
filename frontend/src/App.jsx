@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import UploadPage from './pages/UploadPage';
 import QuerySelectionPage from './pages/QuerySelectionPage';
+import ResultsPage from './pages/ResultsPage';
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<UploadPage />} />
         <Route path="/queries" element={<QuerySelectionPage />} />
-        {/* Results page will be added next */}
+        <Route path="/analyze" element={<ResultsPage />} />
       </Routes>
     </Router>
   );
