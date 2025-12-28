@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     # Startup: Load embedding model and connect to Redis
     print("🚀 Starting RAG Optimizer API...")
     redis_client.connect()
-    embedding_service.load_model()
+    # embedding_service.load_model()
     yield
     # Shutdown: cleanup if needed
     print("👋 Shutting down...")

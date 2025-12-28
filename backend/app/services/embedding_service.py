@@ -12,7 +12,11 @@ class EmbeddingService:
         if self.model is None:
             print("Loading embedding model...")
             # Using lightweight model to reduce storage (~60MB instead of ~450MB)
-            self.model = SentenceTransformer('all-MiniLM-L6-v2')
+            # self.model = SentenceTransformer('all-MiniLM-L6-v2')
+            self.model = SentenceTransformer('paraphrase-MiniLM-L3-v2',
+                                              device="cpu",
+                                              cache_folder="/tmp")
+            # self.model.half()
             print("Model loaded successfully")
 
     def generate_embedding(self, text: str) -> np.ndarray:

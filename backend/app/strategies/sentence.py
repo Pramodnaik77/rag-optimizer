@@ -9,10 +9,10 @@ try:
 except LookupError:
     nltk.download('punkt_tab', quiet=True)
 
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt', quiet=True)
+# try:
+#     nltk.data.find('tokenizers/punkt')
+# except LookupError:
+#     nltk.download('punkt', quiet=True)
 
 class SentenceBasedStrategy(ChunkingStrategy):
     def __init__(self):
