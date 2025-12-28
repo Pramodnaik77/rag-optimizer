@@ -10,11 +10,6 @@ try:
 except LookupError:
     nltk.download('punkt_tab', quiet=True)
 
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt', quiet=True)
-
 class SemanticChunkStrategy(ChunkingStrategy):
     def __init__(self):
         super().__init__(

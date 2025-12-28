@@ -11,6 +11,7 @@ class EmbeddingService:
         """Load embedding model - called at startup"""
         if self.model is None:
             print("Loading embedding model...")
+            # Using lightweight model to reduce storage (~60MB instead of ~450MB)
             self.model = SentenceTransformer('all-MiniLM-L6-v2')
             print("Model loaded successfully")
 
