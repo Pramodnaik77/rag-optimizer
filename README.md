@@ -16,291 +16,217 @@
 ---
 
 ## 📖 Overview
+# 📊 RAG Pipeline Optimizer
 
-RAG Pipeline Optimizer is a powerful tool designed to help developers and data scientists find the optimal chunking strategy for their RAG (Retrieval-Augmented Generation) pipelines. It automatically tests multiple chunking approaches against your documents and queries, providing detailed performance metrics to guide your implementation decisions.
+A powerful tool to analyze and compare different RAG (Retrieval-Augmented Generation) chunking strategies. Upload a document, generate test queries, and discover which chunking strategy works best for your use case.
 
-### 🎯 Why Use This Tool?
+## 🚀 Features
 
-Choosing the right chunking strategy can improve your RAG system's accuracy by up to **40%**. This tool eliminates guesswork by:
+- **6 Chunking Strategies Tested**
+  - Fixed Size Chunks
+  - Semantic Chunks
+  - Sliding Window
+  - Recursive Character Split
+  - Token-Based Chunks
+  - Paragraph-Based Chunks
 
-- **Testing 6 different chunking strategies** simultaneously
-- **Evaluating accuracy, relevance, cost, and latency** for each approach
-- **Providing actionable insights** based on your specific use case
-- **Comparing performance across custom queries** you define
+- **Automated Query Generation**
+  - AI-powered test query creation from your documents
+  - Custom query support
 
----
+- **Comprehensive Analysis**
+  - Accuracy scoring
+  - Relevance metrics
+  - Cost analysis (token usage)
+  - Latency measurements
+  - Visual performance comparison
 
-## ✨ Features
-
-### 🔍 **Intelligent Analysis**
-- **6 Chunking Strategies**: Small, Medium, Large, Semantic, Sentence-Based, Paragraph-Based
-- **Multi-Query Testing**: Test with predefined or custom queries
-- **Comprehensive Metrics**: Accuracy, Relevance, Cost per query, Processing time
-
-### 📊 **Rich Dashboard**
-- **Visual Performance Comparison**: Interactive charts and rankings
-- **Strategy Insights**: AI-generated recommendations
-- **Detailed Query Breakdown**: Per-query performance analysis
-- **Export Capabilities**: JSON export for further analysis
-
-### 🚀 **Modern Stack**
-- **Fast Processing**: Powered by Groq's ultra-fast LLM inference
-- **Beautiful UI**: React with TailwindCSS and Recharts
-- **Type Safety**: Full TypeScript support (frontend)
-- **RESTful API**: Well-documented FastAPI backend
-
-### 📱 **User Experience**
-- **Drag & Drop Upload**: Intuitive file handling
-- **Real-time Feedback**: Progress indicators and status updates
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Professional UX**: Clean, modern interface with smooth animations
-
----
+- **Beautiful UI**
+  - Real-time progress tracking
+  - Interactive charts and rankings
+  - Detailed per-query breakdowns
+  - Export results as JSON
 
 ## 🛠️ Tech Stack
 
-### Backend
-- **Framework**: FastAPI (Python 3.11+)
-- **LLM Provider**: Groq API (Llama models)
-- **Embeddings**: OpenAI Ada-002
-- **Chunking**: LangChain text splitters
-- **Vector Search**: FAISS
+**Frontend:**
+- React + Vite
+- React Router
+- Recharts for visualizations
+- Tailwind CSS
+- Lucide React icons
+
+**Backend:**
+- FastAPI (Python)
+- Groq AI for LLM inference
+- Gemini API for embeddings
+- Redis for caching (optional)
+- Sentence Transformers / ONNX Runtime
+
+## 📦 Installation
 
 ### Frontend
-- **Framework**: React 18 + Vite
-- **Styling**: TailwindCSS
-- **Charts**: Recharts
-- **Icons**: Lucide React
-- **HTTP Client**: Axios
-- **Routing**: React Router v6
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-Required
-Python 3.11+
-
-Node.js 18+
-
-npm or yarn
-
-API Keys (required)
-Groq API Key (get from https://console.groq.com)
-
-OpenAI API Key (get from https://platform.openai.com)
-
-text
-
-### Installation
-
-#### 1️⃣ Clone the repository
-
-git clone https://github.com/yourusername/rag-pipeline-optimizer.git
-cd rag-pipeline-optimizer
-
-text
-
-#### 2️⃣ Setup Backend
-
-cd backend
-
-Create virtual environment
-python -m venv venv
-
-Activate virtual environment
-On Windows:
-venv\Scripts\activate
-
-On macOS/Linux:
-source venv/bin/activate
-
-Install dependencies
-pip install -r requirements.txt
-
-Create .env file
-cat > .env << EOF
-GROQ_API_KEY=your_groq_api_key_here
-OPENAI_API_KEY=your_openai_api_key_here
-EOF
-
-Start backend server
-uvicorn app.main:app --reload --port 8000
-
-text
-
-Backend will be available at `http://localhost:8000`
-
-#### 3️⃣ Setup Frontend
-
-cd ../frontend
-
-Install dependencies
+```bash
+cd frontend
 npm install
-
-Create .env file
-cat > .env << EOF
-VITE_API_URL=http://localhost:8000
-EOF
-
-Start development server
 npm run dev
+```
 
-text
+The app will run on `http://localhost:5173`
 
-Frontend will be available at `http://localhost:5173`
+### Backend
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
----
+The API will run on `http://localhost:8000`
 
-## 📚 Usage
+## 🔧 Configuration
 
-### 1. Upload Document
+### Environment Variables
 
-- Click **"Choose File"** or drag and drop a `.txt` file
-- Supported formats: Plain text (PDF and DOCX support coming soon)
-- Maximum file size: 10MB
+Create `.env` files in both frontend and backend directories:
 
-### 2. Select Queries
+**Backend `.env`:**
+```env
+# LLM API Keys
+GROQ_API_KEY=your_groq_key_here
+GEMINI_API_KEY=your_gemini_key_here
 
-- Choose from **predefined queries** or add **custom queries**
-- Minimum 1 query required
-- Custom queries help test your specific use case
+# Redis (optional)
+REDIS_URL=redis://localhost:6379
 
-### 3. Analyze
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:5173
+```
 
-- Click **"Start Analysis"**
-- Wait 2-3 minutes while the system:
-  - Chunks your document 6 different ways
-  - Tests each strategy against your queries
-  - Evaluates accuracy and relevance
-  - Calculates costs and latency
-
-### 4. Review Results
-
-- **Winner Card**: See the recommended strategy
-- **Performance Chart**: Visual comparison of all strategies
-- **Rankings**: Detailed breakdown with metrics
-- **Query Results**: Per-query performance analysis
-- **Export**: Download full results as JSON
-
----
-
-## 📁 Project Structure
-
-rag-pipeline-optimizer/
-├── backend/
-│ ├── app/
-│ │ ├── main.py # FastAPI application
-│ │ ├── services/
-│ │ │ ├── chunking.py # Chunking strategies
-│ │ │ ├── embeddings.py # Vector embeddings
-│ │ │ ├── retrieval.py # Document retrieval
-│ │ │ └── evaluation.py # Performance evaluation
-│ │ ├── models/
-│ │ │ └── schemas.py # Pydantic models
-│ │ └── utils/
-│ │ └── file_handler.py # File processing
-│ ├── requirements.txt
-│ └── .env
-│
-├── frontend/
-│ ├── src/
-│ │ ├── pages/
-│ │ │ ├── UploadPage.jsx # Document upload
-│ │ │ ├── QuerySelectionPage.jsx # Query selection
-│ │ │ └── ResultsPage.jsx # Results dashboard
-│ │ ├── components/
-│ │ │ ├── Header.jsx
-│ │ │ └── StrategyCard.jsx
-│ │ ├── services/
-│ │ │ └── api.js # API client
-│ │ ├── App.jsx
-│ │ └── main.jsx
-│ ├── package.json
-│ ├── vite.config.js
-│ └── tailwind.config.js
-│
-└── README.md
-
-text
-
----
-
-## ⚙️ Configuration
-
-### Backend Environment Variables
-
-Required
-GROQ_API_KEY=gsk_xxxxxxxxxxxxx # Groq API key
-OPENAI_API_KEY=sk-xxxxxxxxxxxxx # OpenAI API key
-
-Optional
-LOG_LEVEL=INFO # Logging level
-MAX_UPLOAD_SIZE=10485760 # Max file size (10MB)
-
-text
-
-### Frontend Environment Variables
-
-VITE_API_URL=http://localhost:8000 # Backend API URL
-
-text
-
----
+**Frontend `.env`:**
+```env
+VITE_API_URL=http://localhost:8000
+```
 
 ## 🚀 Deployment
 
-### Docker Deployment (Recommended)
+### Backend (Render)
 
-Build and run with Docker Compose
-docker-compose up -d
+**Important:** This project uses Gemini embeddings API to work within Render's 512MB free tier.
 
-Access the application
-Frontend: http://localhost:3000
-Backend: http://localhost:8000
-API Docs: http://localhost:8000/docs
-text
-
-### Manual Deployment
-
-#### Backend (Railway, Render, AWS)
-
-Set environment variables in your platform
-GROQ_API_KEY=your_key
-OPENAI_API_KEY=your_key
-
-Deploy command
+**Start Command:**
+```bash
 uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
 
-text
+**Environment Variables:**
+- `GROQ_API_KEY` - For LLM inference (14,400 req/day free)
+- `GEMINI_API_KEY` - For embeddings
+- `FRONTEND_URL` - Your deployed frontend URL
+- `REDIS_URL` - (Optional) Your Redis connection string
 
-#### Frontend (Vercel, Netlify)
+### Frontend (Vercel/Netlify)
 
-Build command
+Build command:
+```bash
 npm run build
+```
 
-Output directory
-dist
+Output directory: `dist`
 
-Environment variable
-VITE_API_URL=https://your-backend-url.com
+**Environment Variables:**
+- `VITE_API_URL` - Your deployed backend URL
 
-text
+## 📂 Project Structure
+```
+rag-optimizer/
+├── frontend/
+│   ├── src/
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Main pages (Home, Upload, Queries, Results)
+│   │   ├── services/       # API integration
+│   │   └── App.jsx
+│   └── package.json
+│
+└── backend/
+    ├── app/
+    │   ├── api/            # API routes
+    │   ├── services/       # Business logic (RAG, embeddings, LLM)
+    │   ├── models/         # Pydantic models
+    │   ├── utils/          # Helper functions
+    │   └── main.py
+    └── requirements.txt
+```
+
+## 🌿 Git Branches
+
+- **`main`** - Production version with Gemini embeddings (Render-compatible)
+- **`backup/local-embeddings`** - Old version with local embeddings (RAM intensive)
+
+### Switching Approaches
+
+To use local embeddings (requires more RAM):
+```bash
+git checkout backup/local-embeddings
+```
+
+To use Gemini API (cloud-based, memory-efficient):
+```bash
+git checkout main
+```
+
+## 🎯 How It Works
+
+1. **Upload Document** - PDF, DOCX, or TXT files
+2. **Generate Queries** - AI creates test questions or add your own
+3. **Run Analysis** - Tests 6 strategies × N queries
+4. **View Results** - Compare accuracy, cost, speed, and get recommendations
+
+## 📊 Metrics Explained
+
+- **Accuracy**: How correct are the generated answers?
+- **Relevance**: Quality of retrieved context chunks
+- **Cost**: Token usage and API costs
+- **Latency**: Response generation speed
+
+## 🐛 Known Issues & Solutions
+
+### Memory Issues on Render (512MB)
+✅ **Solved** - Using Gemini embeddings API instead of local models
+
+### Gemini Rate Limits
+⚠️ Free tier: 20 requests/day for generation  
+✅ **Solution** - Using Groq for LLM (14,400 req/day)
+
+### Dependency Conflicts
+⚠️ `groq` vs `google-generativeai` httpx version mismatch  
+✅ **Solution** - Use compatible versions (see requirements.txt)
+
+## 🤝 Contributing
+
+Contributions welcome! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+MIT License - feel free to use this project for your own RAG experiments!
+
+## 🔗 Links
+
+- [Groq API Docs](https://console.groq.com/docs)
+- [Gemini API Docs](https://ai.google.dev/docs)
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+- [React Documentation](https://react.dev/)
+
+## 💡 Future Enhancements
+
+- [ ] Add more chunking strategies
+- [ ] Support for multi-modal documents (images, tables)
+- [ ] A/B testing framework
+- [ ] Cost optimization recommendations
+- [ ] Export to Markdown reports
+- [ ] Integration with popular vector databases
 
 ---
 
-## 📊 API Documentation
+**Built with ❤️ for the RAG community**
 
-Once the backend is running, visit:
-
-**Swagger UI**: `http://localhost:8000/docs`  
-**ReDoc**: `http://localhost:8000/redoc`
-
-### Key Endpoints
-
-POST /api/upload # Upload document
-POST /api/analyze # Run analysis
-GET /api/documents/{id} # Get document info
-GET /health # Health check
+Need help? [Open an issue](https://github.com/yourusername/rag-optimizer/issues) or check the [documentation](#).
