@@ -26,15 +26,8 @@ export const uploadDocument = async (file, mainQuery = '') => {
 };
 
 export const generateQueries = async (documentId, mainQuery = '') => {
-  const formData = new FormData();
-  if (mainQuery) {
-    formData.append('main_query', mainQuery);
-  }
-
-  const response = await api.post(`/documents/${documentId}/generate-queries`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  const response = await api.post(`/documents/${documentId}/generate-queries`, {
+    main_query: mainQuery || '',
   });
 
   return response.data;

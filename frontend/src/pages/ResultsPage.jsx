@@ -1155,14 +1155,14 @@ export default function ResultsPage() {
   // ANALYZING STATE - Split Layout
   if (analyzing) {
     return (
-      <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
+      <div className="h-screen flex flex-col bg-gray-50">
         {/* Header */}
         <Header />
 
         {/* Split Layout - Matches Other Pages */}
-        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        <div className="flex-1 flex flex-col lg:flex-row">
           {/* Left Panel - 35% */}
-          <div className="w-full lg:w-[35%] bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 lg:p-10 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-blue-100 relative overflow-y-auto">
+          <div className="w-full lg:w-[35%] bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 lg:p-10 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-blue-100 relative overflow-y-auto min-h-0">
             {/* Decorative Pattern */}
             <div className="absolute inset-0 opacity-[0.03]" style={{
               backgroundImage: `radial-gradient(circle at 1px 1px, rgb(59, 130, 246) 1px, transparent 0)`,
@@ -1232,7 +1232,7 @@ export default function ResultsPage() {
           </div>
 
           {/* Right Panel - 65% */}
-          <div className="flex-1 bg-white p-6 lg:p-10 flex flex-col justify-center overflow-y-auto">
+          <div className="flex-1 bg-white p-6 lg:p-10 flex flex-col justify-center overflow-y-auto min-h-0">
             <div className="max-w-3xl mx-auto w-full space-y-8">
               {/* Animated Loader */}
               <div className="text-center">

@@ -4,6 +4,7 @@ class LLMProvider(str, Enum):
     GROQ = "groq"
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
+    GEMINI = "gemini"
 
 class StrategyType(str, Enum):
     SMALL_CHUNKS = "small_chunks"
@@ -48,6 +49,7 @@ CHUNK_CONFIGS = {
     "large_chunks": {"size": 1024, "overlap": 200},
     "high_overlap": {"size": 512, "overlap": 256},
     "sentence_based": {"sentences_per_chunk": 5},
+    "semantic": {"min_sentences": 2, "max_sentences": 6},
 }
 
 RAG_PROMPT_TEMPLATE = """You are a helpful assistant. Answer the user's question based ONLY on the provided context.
