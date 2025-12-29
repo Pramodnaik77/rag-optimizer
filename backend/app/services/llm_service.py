@@ -1,6 +1,7 @@
 from groq import Groq
 from openai import OpenAI
 from anthropic import Anthropic
+from google import genai
 from app.config import settings
 from app.core.constants import (
     LLMProvider, GROQ_MODELS, OPENAI_MODELS,
@@ -14,6 +15,7 @@ class LLMService:
         self.groq_client = None
         self.openai_client = None
         self.anthropic_client = None
+        self.gemini_client = None
 
     def _get_groq_client(self) -> Groq:
         if self.groq_client is None:
@@ -33,6 +35,13 @@ class LLMService:
         if not key:
             raise LLMProviderError("Anthropic API key required")
         return Anthropic(api_key=key)
+
+    def _get_gemini_client(self) -> genai.Client:
+        if self.gemini_client is None:
+            if not settings.GEMINI_API_KEY:
+                raise LLMProviderError("GEMINI_API_KEY not set")
+            self.gemini_client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        return self.gemini_client
 
     def generate_answer(
         self,
@@ -55,6 +64,8 @@ class LLMService:
                 return self._generate_openai(prompt, model, api_key)
             elif provider == LLMProvider.ANTHROPIC:
                 return self._generate_anthropic(prompt, model, api_key)
+            elif provider == LLMProvider.GEMINI:
+                return self._generate_gemini(prompt, model)
             else:
                 raise LLMProviderError(f"Unknown provider: {provider}")
         except Exception as e:
@@ -126,6 +137,28 @@ class LLMService:
             (input_tokens / 1_000_000) * model_config["cost_per_1m_input"] +
             (output_tokens / 1_000_000) * model_config["cost_per_1m_output"]
         )
+
+        return answer, input_tokens, output_tokens, cost
+
+    def _generate_gemini(self, prompt: str, model: str = None) -> Tuple[str, int, int, float]:
+        client = self._get_gemini_client()
+        model = model or "gemini-3-flash-preview"
+
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt
+        )
+
+        answer = response.text or ""
+
+        # Gemini free tier does not always return usage
+        usage = getattr(response, "usage_metadata", None)
+
+        input_tokens = usage.prompt_token_count if usage else 0
+        output_tokens = usage.candidates_token_count if usage else 0
+
+        # Free tier → cost = 0 (important for UI + metrics)
+        cost = 0.0
 
         return answer, input_tokens, output_tokens, cost
 

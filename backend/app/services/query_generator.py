@@ -1,30 +1,23 @@
 from app.services.llm_service import llm_service
 from app.core.constants import LLMProvider
 
-QUERY_GENERATION_PROMPT = """Based on the following document, generate exactly 7 diverse test questions that would help evaluate a RAG system's performance.
+QUERY_GENERATION_PROMPT = """Based on the following document, generate exactly 7 diverse, specific questions that would test different aspects of a RAG system.
 
 Document:
 {document}
 
-Generate questions in these categories:
-1. Summary - Ask for a high-level summary
-2. Concept Extraction - Ask about main concepts or ideas
-3. Definition - Ask to define key terms or terminology
-4. Reasoning - Ask "how" or "why" questions requiring analysis
-5. Comparison - Ask to compare or contrast ideas/approaches
-6. Fact Extraction - Ask for specific data, numbers, or entities
-7. Insight - Ask for implications or conclusions
+Generate 7 questions in these categories:
+1. Summary - Ask for a high-level summary of the main topic
+2. Key Concepts - Ask specifically about the main ideas, concepts, or themes mentioned
+3. Definitions - Ask to define specific terms, acronyms, or concepts used in the document
+4. Analysis - Ask "how" or "why" questions requiring deeper analysis of the content
+5. Comparison - Ask to compare or contrast specific approaches, ideas, or concepts from the document
+6. Details - Ask for specific data, statistics, numbers, examples, or entities mentioned
+7. Implications - Ask about the conclusions, implications, benefits, or future impact
+
+IMPORTANT: Generate ONLY 7 questions based on the actual document content. Do NOT use template examples. Each question must reference specific topics, terms, or concepts from the document provided.
 
 Return ONLY the 7 questions, one per line, numbered 1-7. No explanations, no extra text.
-
-Example format:
-1. What is the main topic discussed in this document?
-2. How does concept A relate to concept B?
-3. Define the key terminology used in the document.
-4. Why is the approach described important?
-5. Compare the benefits and drawbacks mentioned.
-6. What specific data or numbers are provided?
-7. What are the main conclusions or implications?
 
 Your 7 questions:"""
 

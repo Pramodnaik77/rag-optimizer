@@ -6,8 +6,8 @@ This script should be run during the build process to cache models.
 import os
 import sys
 
-# Suppress download progress bars
-os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
+# # Suppress download progress bars
+# os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
 
 try:
     print("Pre-downloading embedding model...")
